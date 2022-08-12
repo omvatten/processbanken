@@ -22,7 +22,7 @@ if par1 in tslist and par2 in tslist:
     mask = temp.notna().all(axis=1)
     temp = temp.loc[mask[mask].index]
     temp1 = temp['Value']
-    temp1['ARV'] = temp['ARV'][par1]
+    temp1['ARV'] = temp['ARV'][par1].copy()
     par1_enhet = temp['Enhet'][par1].iloc[0]
     par2_enhet = temp['Enhet'][par2].iloc[0]
     del temp
