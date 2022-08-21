@@ -25,7 +25,7 @@ et = tempT.groupby('Parameter').first()
 for ix in et.index:
     enheter = enheter + ix + ' (' + et.at[ix, 'Enhet'] + ')  '
 
-fig = alt.Chart(tempT).mark_line(point=alt.OverlayMarkDef()).encode(x=alt.X('Datum:T', axis=alt.Axis(format='%b %Y', title='')), y=alt.Y('Value:Q', axis=alt.Axis(title=enheter)), color='Parameter').configure_axisX(labelAngle=45).properties(width=600, height=400)
+fig = alt.Chart(tempT).mark_line(point=alt.OverlayMarkDef()).encode(x=alt.X('Datum:T', axis=alt.Axis(format='%b %Y', title='')), y=alt.Y('Value:Q', axis=alt.Axis(title=enheter)), color='Parameter').configure_axisX(labelAngle=45).properties(width=600, height=400).interactive()
 #, alt.X('Datum', axis=alt.Axis(title='')), y=alt.Y(p, axis=alt.Axis('')))
 st.altair_chart(fig)
 
