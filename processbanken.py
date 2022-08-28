@@ -7,7 +7,7 @@ header = st.container()
 download = st.container()
 imageshow = st.container()
 
-with open('data/dataframe.pickle', 'rb') as f:
+with open('data/df_grund.pickle', 'rb') as f:
     df = pickle.load(f)
 arv_options = sorted(df[['Stad', 'ARV']].agg(': '.join, axis=1).unique().tolist())
 
@@ -22,7 +22,8 @@ with header:
 
 with download:
     st.subheader('Ladda ner data')
-    st.markdown('Om du vill ladda ner rådatan som csv-fil (öppningsbar i Excel) så kan du välja reningsverk och klicka nedan.')
+    st.markdown('Om du vill ladda ner rådatan som csv-fil (öppningsbar i Excel) så kan du välja reningsverk och klicka nedan. '
+                'Funkar bara för grunddatan.')
 
     arv = st.selectbox('Välj reningsverk för datanedladdning', arv_options)
     arvs = arv.split(': ')[1]
@@ -36,7 +37,9 @@ with imageshow:
     st.subheader('Visa process')
 
     arv = st.selectbox('Välj reningsverk att visa', arv_options)
-    arvs = arv.split(': ')[1]
-    image = Image.open('data/'+arvs+ '.png')
-    st.write(arvs)
-    st.image(image)
+    show_arv_schema = st.button('Klicka för att visa')
+    if show_arv_schema:
+        arvs = arv.split(': ')[1]
+        image = Image.open('data/'+arvs+ '.png')
+        st.write(arvs)
+        st.image(image)
