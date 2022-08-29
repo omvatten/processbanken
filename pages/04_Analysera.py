@@ -5,6 +5,7 @@ import pickle
 
 st.title('Analysera')
 grund_cont = st.container()
+avg_cont = st.container()
 
 with grund_cont:
     with open('data/df_grund.pickle', 'rb') as f:
@@ -77,3 +78,25 @@ with grund_cont:
         fig = alt.Chart(temp1).mark_circle().encode(x=alt.X(par1, axis=alt.Axis(title=par1+' ('+par1_enhet+')')), y=alt.Y(par2, axis=alt.Axis(title=par2+' ('+par2_enhet+')')), color='ARV').properties(width=600, height=400)
         st.altair_chart(fig)
     
+with avg_cont:
+    with open('data/yearly_averages.pickle', 'rb') as f:
+        df = pickle.load(f)
+    st.subheader('Kolla på beräknade årsmedelvärden')
+    st.markdown('Undersök samband mellan olika parametrar.')
+    
+    parametrar = sorted(df['Parameter'].unique().tolist())
+    par1 = st.selectbox('Välj parameter 1', parametrar, index=5, key='avg1')
+    par2 = st.selectbox('Välj parameter 2', parametrar, index=6, key='avg2')
+
+    temp = df[df['Parameter'].isin([par1, par2])]
+    temp['cd'] = df[['ARV', 'Process']].agg(': '.join, axis=1)
+    temp = temp.pivot(index='cd', columns='Parameter', values=['Value', 'Enhet'])
+    mask = temp.notna().all(axis=1)
+    temp = temp.loc[mask[mask].index]
+    temp1 = temp['Value']
+    temp1['cd'] = temp1.index
+    par1_enhet = temp['Enhet'][par1].iloc[0]
+    par2_enhet = temp['Enhet'][par2].iloc[0]
+    del temp
+    fig = alt.Chart(temp1).mark_circle(size=150).encode(x=alt.X(par1, axis=alt.Axis(title=par1+' ('+par1_enhet+')')), y=alt.Y(par2, axis=alt.Axis(title=par2+' ('+par2_enhet+')')), tooltip='cd').properties(width=600, height=400)
+    st.altair_chart(fig)
