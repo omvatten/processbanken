@@ -95,8 +95,11 @@ with avg_cont:
     temp = temp.loc[mask[mask].index]
     temp1 = temp['Value']
     temp1['cd'] = temp1.index
-    par1_enhet = temp['Enhet'][par1].iloc[0]
-    par2_enhet = temp['Enhet'][par2].iloc[0]
-    del temp
-    fig = alt.Chart(temp1).mark_circle(size=150).encode(x=alt.X(par1, axis=alt.Axis(title=par1+' ('+par1_enhet+')')), y=alt.Y(par2, axis=alt.Axis(title=par2+' ('+par2_enhet+')')), tooltip='cd').properties(width=600, height=400)
-    st.altair_chart(fig)
+    if len(temp) > 0:
+        par1_enhet = temp['Enhet'][par1].iloc[0]
+        par2_enhet = temp['Enhet'][par2].iloc[0]
+        del temp
+        fig = alt.Chart(temp1).mark_circle(size=150).encode(x=alt.X(par1, axis=alt.Axis(title=par1+' ('+par1_enhet+')')), y=alt.Y(par2, axis=alt.Axis(title=par2+' ('+par2_enhet+')')), tooltip='cd').properties(width=600, height=400)
+        st.altair_chart(fig)
+    else:
+        st.markdown('Det finns inga värden för den här kombinationen av parametrar.')
